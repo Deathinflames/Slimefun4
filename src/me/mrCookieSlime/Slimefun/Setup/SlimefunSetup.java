@@ -2009,7 +2009,7 @@ public class SlimefunSetup {
 
 		new SlimefunGadget(Categories.MACHINES_1, SlimefunItems.COMPOSTER, "COMPOSTER", RecipeType.ENHANCED_CRAFTING_TABLE,
 		new ItemStack[] {new ItemStack(Material.WOOD_STEP), null, new ItemStack(Material.WOOD_STEP), new ItemStack(Material.WOOD_STEP), null, new ItemStack(Material.WOOD_STEP), new ItemStack(Material.WOOD_STEP), new ItemStack(Material.CAULDRON_ITEM), new ItemStack(Material.WOOD_STEP)},
-		new ItemStack[] {new CustomItem(Material.LEAVES, 0, 8), new ItemStack(Material.DIRT), new CustomItem(Material.LEAVES_2, 0, 8), new ItemStack(Material.DIRT), new CustomItem(Material.SAPLING, 0, 8), new ItemStack(Material.DIRT), new ItemStack(Material.STONE, 4), new ItemStack(Material.NETHERRACK), new ItemStack(Material.SAND, 2), new ItemStack(Material.SOUL_SAND), new ItemStack(Material.WHEAT, 4), new ItemStack(Material.NETHER_STALK)})
+		new ItemStack[] {new CustomItem(Material.LEAVES, 0, 64), new ItemStack(Material.DIRT), new CustomItem(Material.LEAVES_2, 0, 64), new ItemStack(Material.DIRT), new CustomItem(Material.SAPLING, 0, 32), new ItemStack(Material.DIRT), new ItemStack(Material.STONE, 4), new ItemStack(Material.NETHERRACK), new ItemStack(Material.SAND, 2), new ItemStack(Material.SOUL_SAND), new ItemStack(Material.WHEAT, 4), new ItemStack(Material.NETHER_STALK)})
 		.register(true, new ItemInteractionHandler() {
 
 			@Override
