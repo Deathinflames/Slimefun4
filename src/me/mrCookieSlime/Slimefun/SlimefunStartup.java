@@ -70,7 +70,7 @@ public class SlimefunStartup extends JavaPlugin {
 	static Config researches;
 	static Config items;
 	static Config whitelist;
-	static Config config;
+	public static Config config;
 
 	public static TickerTask ticker;
 

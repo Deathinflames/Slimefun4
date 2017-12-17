@@ -156,7 +156,13 @@ import me.mrCookieSlime.Slimefun.listeners.AncientAltarListener;
 
 @SuppressWarnings("deprecation")
 public class SlimefunSetup {
+	public static final int getNumAllowedAndroids() {
+		return SlimefunStartup.config.getInt("options.allowed-androids-per-player");
+	}
 
+	public static final String getMaxAndroidsReachedMessage() {
+		return ChatColor.translateAlternateColorCodes('&', SlimefunStartup.config.getString("options.max-androids-reached-msg"));
+	}
 	public static void setupItems() throws Exception {
 		new SlimefunItem(Categories.WEAPONS, SlimefunItems.GRANDMAS_WALKING_STICK, "GRANDMAS_WALKING_STICK", RecipeType.ENHANCED_CRAFTING_TABLE,
 		new ItemStack[] {null, new ItemStack(Material.LOG), null, null, new ItemStack(Material.LOG), null, null, new ItemStack(Material.LOG), null})

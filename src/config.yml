@@ -12,6 +12,8 @@ options:
   emerald-enchantment-limit: 2
   research-unlock-fireworks: true
   research-give-fireworks: true
+  allowed-androids-per-player: 20
+  max-androids-reached-msg: '&a&lSlimefun &7> &4You''ve placed your total android limit of &c[NUMANDROIDS]&4.'
 guide:
   default-view-book: false
 URID:

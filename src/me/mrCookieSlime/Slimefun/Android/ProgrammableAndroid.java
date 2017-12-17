@@ -25,6 +25,7 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineFuel;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.Setup.Messages;
 import me.mrCookieSlime.Slimefun.Setup.SlimefunManager;
+import me.mrCookieSlime.Slimefun.Setup.SlimefunSetup;
 import me.mrCookieSlime.Slimefun.SlimefunStartup;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -194,6 +195,17 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
 
 			@Override
 			public void onPlace(Player p, Block b, SlimefunItem item) {
+				final int numAllowedAndroids = SlimefunSetup.getNumAllowedAndroids();
+				if(numAllowedAndroids >= 0) {
+					List<SlimefunItem> androids = BlockStorage.getPlayerAndroids(p);
+					if(androids.size() >= numAllowedAndroids) {
+						p.sendMessage(SlimefunSetup.getMaxAndroidsReachedMessage().replace("[NUMANDROIDS]", Integer.toString(androids.size())));
+						ItemStack returnToPlayer = BlockStorage.retrieve(b);
+						p.getWorld().dropItemNaturally(p.getLocation(), returnToPlayer);
+						Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, () -> b.setType(Material.AIR, true));
+						return;
+					}
+				}
 				BlockStorage.addBlockInfo(b, "owner", p.getUniqueId().toString());
 				BlockStorage.addBlockInfo(b, "script", "START-TURN_LEFT-REPEAT");
 				BlockStorage.addBlockInfo(b, "index", "0");

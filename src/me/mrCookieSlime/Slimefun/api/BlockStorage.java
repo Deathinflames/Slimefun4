@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import me.mrCookieSlime.Slimefun.Android.ProgrammableAndroid;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -16,6 +17,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -237,7 +239,36 @@ public class BlockStorage {
 		changes = 0;
 		chunk_changes = 0;
 	}
-	
+
+	public static final List<Block> getPlayerSlimefunBlocks(Player p) {
+		String playerUUID = p.getUniqueId().toString();
+		ArrayList<Block> playerSFBlocks = new ArrayList<>();
+		for(Set<Block> blocks : BlockStorage.ticking_chunks.values()) {
+			for(Block sfBlock : blocks) {
+				String uuid = BlockStorage.getBlockInfo(sfBlock, "owner");
+				if(playerUUID.equals(uuid)) {
+					playerSFBlocks.add(sfBlock);
+				}
+			}
+		}
+		return playerSFBlocks;
+	}
+
+	public static final List<SlimefunItem> getPlayerAndroids(Player p) {
+		ArrayList<SlimefunItem> androids = new ArrayList<>();
+		for(Block block : getPlayerSlimefunBlocks(p)) {
+			SlimefunItem sf = BlockStorage.getSlimeFunItem(block);
+			if(sf instanceof ProgrammableAndroid) {
+				androids.add(sf);
+			}
+		}
+		return androids;
+	}
+	public static SlimefunItem getSlimeFunItem(Block block) {
+		if(!hasBlockInfo(block)) return null;
+		return SlimefunItem.getByName(getBlockInfo(block, "id"));
+	}
+
 	public static void store(Block block, ItemStack item) {
 		SlimefunItem sfitem = SlimefunItem.getByItem(item);
 		if (sfitem != null) addBlockInfo(block, "id", sfitem.getName(), true);
