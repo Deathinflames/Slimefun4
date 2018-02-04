@@ -1440,7 +1440,6 @@ public class SlimefunSetup {
 
 		new SlimefunItem(Categories.TECH_MISC, SlimefunItems.SOLAR_PANEL, "SOLAR_PANEL", RecipeType.ENHANCED_CRAFTING_TABLE,
 		new ItemStack[] {new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), SlimefunItems.SILICON, SlimefunItems.SILICON, SlimefunItems.SILICON, SlimefunItems.FERROSILICON, SlimefunItems.FERROSILICON, SlimefunItems.FERROSILICON})
-
 		.register(true);
 
 		new SolarHelmet(Categories.TECH, SlimefunItems.SOLAR_HELMET, "SOLAR_HELMET", RecipeType.ENHANCED_CRAFTING_TABLE,
@@ -1466,10 +1465,11 @@ public class SlimefunSetup {
 					if (e.getBlock().getType().equals(Material.SKULL)) return true;
 
 					int j = -1;
-					for (int i = 0; i < e.getBlock().getDrops().size(); i++) {
-						if (((List<ItemStack>) e.getBlock().getDrops()).get(i) != null) {
+					List<ItemStack> dropsList = (List<ItemStack>) e.getBlock().getDrops();
+					for (int i = 0; i < dropsList.size(); i++) {
+						if (dropsList.get(i) != null) {
 							j++;
-							drops.add(e.getBlock().getType().toString().endsWith("_ORE") ? new CustomItem(((List<ItemStack>) e.getBlock().getDrops()).get(i), fortune): ((List<ItemStack>) e.getBlock().getDrops()).get(i));
+							drops.add(e.getBlock().getType().toString().endsWith("_ORE") ? new CustomItem(dropsList.get(i), fortune): dropsList.get(i));
 							if (RecipeCalculator.getSmeltedOutput(drops.get(i).getType()) != null) {
 								e.getBlock().getWorld().playEffect(e.getBlock().getLocation(), Effect.MOBSPAWNER_FLAMES, 1);
 								drops.set(j, new CustomItem(RecipeCalculator.getSmeltedOutput(drops.get(i).getType()), drops.get(i).getAmount()));
@@ -3120,7 +3120,11 @@ public class SlimefunSetup {
 			@Override
 			public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
 				Item stack = AncientAltarListener.findItem(b);
-				if (stack != null) stack.removeMetadata("item_placed", SlimefunStartup.instance);
+				if (stack != null) { 
+					stack.removeMetadata("item_placed", SlimefunStartup.instance);
+					b.getWorld().dropItem(b.getLocation(), AncientAltarListener.fixItemStack(stack.getItemStack(), stack.getCustomName()));
+					stack.remove();
+				}
 				return true;
 			}
 		});

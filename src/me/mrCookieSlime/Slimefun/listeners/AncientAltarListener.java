@@ -29,9 +29,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -46,10 +44,8 @@ public class AncientAltarListener implements Listener {
 	List<Block> altars = new ArrayList<Block>();
 	Set<UUID> removed_items = new HashSet<UUID>();
 
-	@EventHandler(priority=EventPriority.HIGH)
+	@EventHandler(priority=EventPriority.HIGH, ignoreCancelled = true)
 	public void onInteract(PlayerInteractEvent e) {
-		if (e.isCancelled())
-			return;
 		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 		Block b = e.getClickedBlock();
 		SlimefunItem item = BlockStorage.check(b);
@@ -58,7 +54,7 @@ public class AncientAltarListener implements Listener {
 				e.setCancelled(true);
 				Item stack = findItem(b);
 				if (stack == null) {
-					if(e.getPlayer().getItemInHand().getType().equals(Material.AIR)) return;
+					if(e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.AIR)) return;
 					if(b.getRelative(0, 1, 0).getType() != Material.AIR) {
 						Messages.local.sendTranslation(e.getPlayer(), "machines.ANCIENT_PEDESTAL.obstructed", true);
 						return;
@@ -168,10 +164,9 @@ public class AncientAltarListener implements Listener {
 		Block b = e.getBlockPlaced().getRelative(0, -1, 0);
 		SlimefunItem item = BlockStorage.check(b);
 		if(item == null) return;
-		if(item.getName().equalsIgnoreCase("ANCIENT_PEDESTAL")) {
+		if(item.getID().equalsIgnoreCase("ANCIENT_PEDESTAL")) {
 			Messages.local.sendTranslation(e.getPlayer(), "messages.cannot-place", true);
 			e.setCancelled(true);
 		}
 	}
 }
-

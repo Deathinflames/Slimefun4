@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -271,13 +270,22 @@ public class BlockStorage {
 
 	public static void store(Block block, ItemStack item) {
 		SlimefunItem sfitem = SlimefunItem.getByItem(item);
-		if (sfitem != null) addBlockInfo(block, "id", sfitem.getName(), true);
+		if (sfitem != null) addBlockInfo(block, "id", sfitem.getID(), true);
 	}
 	
 	public static void store(Block block, String item) {
 		addBlockInfo(block, "id", item, true);
 	}
 	
+	/**
+     * Retrieves the SlimefunItem's ItemStack from the specified Block.
+     * If the specified Block is registered in BlockStorage, its data will be erased from it, regardless of the returned value.
+     *
+     * @param  block  the block to retrieve the ItemStack from
+     * @return the SlimefunItem's ItemStack corresponding to the block if it has one, otherwise null
+     *
+     * @since 4.0
+     */
 	public static ItemStack retrieve(Block block) {
 		if (!hasBlockInfo(block)) return null;
 		else {
