@@ -22,7 +22,7 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.handlers.BlockTicker;
 public class TickerTask implements Runnable {
 	
 	public boolean HALTED = false;
-	
+
 	public Map<Location, Location> move = new HashMap<Location, Location>();
 	public Map<Location, Boolean> delete = new HashMap<Location, Boolean>();
 	
@@ -321,7 +321,7 @@ public class TickerTask implements Runnable {
 				map_chunktime.put(c, System.currentTimeMillis() - timestamp2);
 			}
 		}
-		
+
 		for (Map.Entry<Location, Location> entry: move.entrySet()) {
 			BlockStorage._integrated_moveLocationInfo(entry.getKey(), entry.getValue());
 		}
