@@ -1,11 +1,7 @@
 package me.mrCookieSlime.Slimefun.api;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import me.mrCookieSlime.Slimefun.Android.ProgrammableAndroid;
 import org.bukkit.Bukkit;
