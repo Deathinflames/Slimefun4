@@ -2755,8 +2755,9 @@ public class SlimefunSetup {
 						if (ChatColor.stripColor(line).startsWith("Type: ")) type = EntityType.valueOf(ChatColor.stripColor(line).replace("Type: ", "").replace(" ", "_").toUpperCase());
 					}
 					if (type != null) {
-						((CreatureSpawner) e.getBlock().getState()).setSpawnedType(type);
-						e.getBlock().getState().update(true, false);
+						CreatureSpawner spawner = (CreatureSpawner) e.getBlock().getState();
+						spawner.setSpawnedType(type);
+						spawner.update(true, false);
 					}
 					return true;
 				}
@@ -2788,8 +2789,8 @@ public class SlimefunSetup {
 		new ItemStack[] {new ItemStack(Material.EGG), new ItemStack(Material.APPLE), new ItemStack(Material.MELON), new ItemStack(Material.SUGAR), null, null, null, null, null}, new CustomItem(SlimefunItems.FRUIT_CAKE, 4))
 		.register(true);
 
-		new SlimefunItem(Categories.CHRISTMAS, SlimefunItems.APPLE_PIE, "APPLE_PIE", RecipeType.ENHANCED_CRAFTING_TABLE,
-		new ItemStack[] {new ItemStack(Material.SUGAR), new ItemStack(Material.APPLE), new ItemStack(Material.EGG), null, null, null, null, null, null}, new CustomItem(SlimefunItems.APPLE_PIE, 2))
+		new SlimefunItem(Categories.CHRISTMAS, SlimefunItems.CHRISTMAS_APPLE_PIE, "CHRISTMAS_APPLE_PIE", RecipeType.ENHANCED_CRAFTING_TABLE,
+		new ItemStack[] {new ItemStack(Material.SUGAR), new ItemStack(Material.APPLE), new ItemStack(Material.EGG), null, null, null, null, null, null}, new CustomItem(SlimefunItems.CHRISTMAS_APPLE_PIE, 2))
 		.register(true);
 
 		new EnhancedFurnace(1, 1, 1, SlimefunItems.ENHANCED_FURNACE, "ENHANCED_FURNACE",
@@ -2913,6 +2914,10 @@ public class SlimefunSetup {
 				else return false;
 			}
 		});
+
+		new SlimefunItem(Categories.CHRISTMAS, SlimefunItems.CHRISTMAS_HOT_CHOCOLATE, "CHRISTMAS_HOT_CHOCOLATE", RecipeType.SMELTERY,
+		new ItemStack[] {SlimefunItems.CHOCOLATE_MILK, null, null, null, null, null, null, null, null}, SlimefunItems.CHRISTMAS_HOT_CHOCOLATE)
+		.register(true);
 
 		new SlimefunItem(Categories.CHRISTMAS, SlimefunItems.CHRISTMAS_CAKE, "CHRISTMAS_CAKE", RecipeType.ENHANCED_CRAFTING_TABLE,
 		new ItemStack[] {new ItemStack(Material.EGG), new ItemStack(Material.SUGAR), SlimefunItems.WHEAT_FLOUR, new ItemStack(Material.MILK_BUCKET), null, null, null, null, null}, new CustomItem(SlimefunItems.CHRISTMAS_CAKE, 4))
@@ -3052,6 +3057,10 @@ public class SlimefunSetup {
 		new ItemStack[] {new ItemStack(Material.SUGAR), new ItemStack(Material.CARROT_ITEM), new ItemStack(Material.EGG), null, null, null, null, null, null}, new CustomItem(SlimefunItems.CARROT_PIE, 2))
 		.register(true);
 
+		new SlimefunItem(Categories.EASTER, SlimefunItems.CHRISTMAS_APPLE_PIE, "APPLE_PIE", RecipeType.ENHANCED_CRAFTING_TABLE,
+		new ItemStack[] {new ItemStack(Material.SUGAR), new ItemStack(Material.APPLE), new ItemStack(Material.EGG), null, null, null, null, null, null}, new CustomItem(SlimefunItems.CHRISTMAS_APPLE_PIE, 2))
+		.register(true);
+
 		new SlimefunItem(Categories.EASTER, SlimefunItems.EASTER_EGG, "EASTER_EGG", RecipeType.ENHANCED_CRAFTING_TABLE,
 		new ItemStack[] {null, null, null, new MaterialData(Material.INK_SACK, (byte) 10).toItemStack(1), new ItemStack(Material.EGG), new MaterialData(Material.INK_SACK, (byte) 13).toItemStack(1), null, null, null}, new CustomItem(SlimefunItems.EASTER_EGG, 2))
 		.register(true, new ItemInteractionHandler() {
@@ -3066,7 +3075,7 @@ public class SlimefunSetup {
 					List<ItemStack> gifts = new ArrayList<ItemStack>();
 					for (int i = 0; i < 2; i++) {
 						gifts.add(new CustomItem(SlimefunItems.CARROT_PIE, 4));
-						gifts.add(new CustomItem(SlimefunItems.APPLE_PIE, 4));
+						gifts.add(new CustomItem(SlimefunItems.CHRISTMAS_APPLE_PIE, 4));
 						gifts.add(new CustomItem(SlimefunItems.CARROT_JUICE, 1));
 					}
 
@@ -3146,7 +3155,7 @@ public class SlimefunSetup {
 
 			@Override
 			public void tick(Block b, SlimefunItem item, Config data) {
-				EnergyNet.tick(b);
+				EnergyNet.getNetworkFromLocationOrCreate(b.getLocation()).tick(b);
 			}
 		});
 
@@ -3193,11 +3202,7 @@ public class SlimefunSetup {
 
 			@Override
 			public double generateEnergy(Location l, SlimefunItem item, Config data) {
-				try {
-					if (l.getBlock().getLightFromSky() != 15) return 0D;
-				} catch(IllegalStateException x) {
-					return 0D;
-				}
+				if (!l.getWorld().isChunkLoaded(l.getBlockX() >> 4, l.getBlockZ() >> 4) || l.getBlock().getLightFromSky() != 15) return 0D;
 				if (l.getWorld().getTime() < 12300 || l.getWorld().getTime() > 23850) return 2D;
 				return 0D;
 			}
@@ -3214,11 +3219,7 @@ public class SlimefunSetup {
 
 			@Override
 			public double generateEnergy(Location l, SlimefunItem item, Config data) {
-				try {
-					if (l.getBlock().getLightFromSky() != 15) return 0D;
-				} catch(IllegalStateException x) {
-					return 0D;
-				}
+				if (!l.getWorld().isChunkLoaded(l.getBlockX() >> 4, l.getBlockZ() >> 4) || l.getBlock().getLightFromSky() != 15) return 0D;
 				if (l.getWorld().getTime() < 12300 || l.getWorld().getTime() > 23850) return 8;
 				return 0D;
 			}
@@ -3235,11 +3236,7 @@ public class SlimefunSetup {
 
 			@Override
 			public double generateEnergy(Location l, SlimefunItem item, Config data) {
-				try {
-					if (l.getBlock().getLightFromSky() != 15) return 0D;
-				} catch(IllegalStateException x) {
-					return 0D;
-				}
+				if (!l.getWorld().isChunkLoaded(l.getBlockX() >> 4, l.getBlockZ() >> 4) || l.getBlock().getLightFromSky() != 15) return 0D;
 				if (l.getWorld().getTime() < 12300 || l.getWorld().getTime() > 23850) return 32;
 				return 0D;
 			}
@@ -3256,11 +3253,7 @@ public class SlimefunSetup {
 
 			@Override
 			public double generateEnergy(Location l, SlimefunItem item, Config data) {
-				try {
-					if (l.getBlock().getLightFromSky() != 15) return 0D;
-				} catch(IllegalStateException x) {
-					return 0D;
-				}
+				if (!l.getWorld().isChunkLoaded(l.getBlockX() >> 4, l.getBlockZ() >> 4) || l.getBlock().getLightFromSky() != 15) return 0D;
 				if (l.getWorld().getTime() < 12300 || l.getWorld().getTime() > 23850) return 128;
 				return 64D;
 			}
@@ -5152,7 +5145,7 @@ public class SlimefunSetup {
 
 			@Override
 			public void tick(Block b, SlimefunItem item, Config data) {
-				CargoNet.tick(b);
+				CargoNet.getNetworkFromLocationOrCreate(b.getLocation()).tick(b);
 			}
 
 			@Override
